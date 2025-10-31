@@ -99,6 +99,15 @@ Never include markdown formatting, triple backticks, or natural language outside
                     "notes": "Hash Table algorithm with O(n) time and O(n) space complexity"
                 }
         
+        if 'island' in task_lower or 'grid' in task_lower:
+            template = get_template(language, 'num_islands')
+            if template:
+                return {
+                    "plan": "Use DFS to explore connected components (islands) in the grid",
+                    "code": template,
+                    "notes": "Depth-First Search algorithm with O(m*n) time and O(m*n) space complexity"
+                }
+        
         # Fall back to original Python-only patterns
         if language != 'python':
             # For non-Python without template, return generic code

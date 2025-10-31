@@ -1,6 +1,6 @@
-# 🤖 CodeSmith - Multi-Language Autonomous Coding Agent
+# 🤖 CodeSmith - Multi-Language AI Code Generator
 
-**An AI-powered system that generates code in Python, C++, Java, and JavaScript from natural language descriptions.**
+**An AI-powered system that generates production-ready code in Python, C++, Java, and JavaScript from natural language descriptions and LeetCode problems.**
 
 [![Status](https://img.shields.io/badge/status-production-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10+-blue)]()
@@ -12,16 +12,16 @@
 
 ## 🎯 What is CodeSmith?
 
-CodeSmith automatically writes code from plain English descriptions **in multiple programming languages**. You describe what you want, provide test cases, and CodeSmith:
+CodeSmith is a **multi-language AI code generator** that automatically writes code from plain English descriptions **in 4 programming languages**. You describe what you want, provide test cases, and CodeSmith:
 
-1. ✅ Generates working code in Python, C++, Java, and JavaScript
-2. ✅ Tests it automatically
-3. ✅ Self-repairs if tests fail
-4. ✅ Detects algorithms and complexity (O(n), O(log n), etc.)
-5. ✅ Parses LeetCode problems directly
-6. ✅ Saves solutions with metadata
+1. ✅ Generates working code in **Python, C++, Java, and JavaScript**
+2. ✅ Tests Python code automatically with sandbox execution
+3. ✅ Self-repairs code if tests fail (up to 3 attempts)
+4. ✅ Detects algorithms and Big-O complexity automatically
+5. ✅ Parses LeetCode problems directly - just copy and paste
+6. ✅ Saves solutions with metadata and complexity analysis
 
-**No more writing boilerplate. Just describe your problem!**
+**No more writing boilerplate in multiple languages. Just describe your problem once!**
 
 ---
 
