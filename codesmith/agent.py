@@ -75,7 +75,40 @@ Never include markdown formatting, triple backticks, or natural language outside
     
     def _mock_generate(self, task: str, feedback: Optional[str] = None) -> Dict[str, Any]:
         """Mock implementation for testing without LLM."""
-        # Simple pattern matching for common tasks
+        from .templates import get_template
+        
+        # Detect language and problem type
+        task_lower = task.lower()
+        
+        # Detect language (order matters - check javascript before java!)
+        language = 'python'
+        if 'c++' in task_lower:
+            language = 'cpp'
+        elif 'javascript' in task_lower or ' js ' in task_lower:
+            language = 'javascript'
+        elif 'java' in task_lower:
+            language = 'java'
+        
+        # Detect problem type
+        if 'two sum' in task_lower or ('sum' in task_lower and 'target' in task_lower):
+            template = get_template(language, 'two_sum')
+            if template:
+                return {
+                    "plan": "Use hash table to find two numbers that sum to target in O(n) time",
+                    "code": template,
+                    "notes": "Hash Table algorithm with O(n) time and O(n) space complexity"
+                }
+        
+        # Fall back to original Python-only patterns
+        if language != 'python':
+            # For non-Python without template, return generic code
+            return {
+                "plan": f"Generate {language} solution",
+                "code": f"// {language.upper()} code would be generated here by real LLM\n// This is just a mock placeholder",
+                "notes": f"{language} code generation requires real LLM"
+            }
+        
+        # Original Python patterns
         task_lower = task.lower()
         
         if 'fibonacci' in task_lower:

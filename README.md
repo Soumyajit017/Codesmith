@@ -1,24 +1,49 @@
-# 🤖 CodeSmith - Autonomous Python Coding Agent
+# 🤖 CodeSmith - Multi-Language Autonomous Coding Agent
 
-**An AI-powered system that generates Python code from natural language descriptions.**
+**An AI-powered system that generates code in Python, C++, Java, and JavaScript from natural language descriptions.**
 
 [![Status](https://img.shields.io/badge/status-production-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10+-blue)]()
 [![Tests](https://img.shields.io/badge/tests-100%25%20passing-success)]()
 [![LLM](https://img.shields.io/badge/LLM-Gemini%20%7C%20GPT--4%20%7C%20Claude-orange)]()
+[![Languages](https://img.shields.io/badge/languages-Python%20%7C%20C%2B%2B%20%7C%20Java%20%7C%20JavaScript-blue)]()
 
 ---
 
 ## 🎯 What is CodeSmith?
 
-CodeSmith automatically writes Python programs from plain English descriptions. You describe what you want, provide test cases, and CodeSmith:
+CodeSmith automatically writes code from plain English descriptions **in multiple programming languages**. You describe what you want, provide test cases, and CodeSmith:
 
-1. ✅ Generates working Python code
+1. ✅ Generates working code in Python, C++, Java, and JavaScript
 2. ✅ Tests it automatically
 3. ✅ Self-repairs if tests fail
-4. ✅ Saves the solution
+4. ✅ Detects algorithms and complexity (O(n), O(log n), etc.)
+5. ✅ Parses LeetCode problems directly
+6. ✅ Saves solutions with metadata
 
 **No more writing boilerplate. Just describe your problem!**
+
+---
+
+## ⚡ NEW: Multi-Language Support
+
+Copy a LeetCode problem, get solutions in **4 languages** with complexity analysis:
+
+```powershell
+python run_multilang.py full problem.txt --llm gemini --api-key YOUR_KEY
+```
+
+**Output:**
+```
+Language    | Status | Algorithm    | Time      | Space
+─────────────────────────────────────────────────────────
+Python      | ✅     | Hash Table   | O(n)      | O(n)
+C++         | ✅     | Hash Table   | O(n)      | O(n)
+Java        | ✅     | Hash Table   | O(n)      | O(n)
+JavaScript  | ✅     | Hash Table   | O(n)      | O(n)
+```
+
+📚 [**Full Multi-Language Guide →**](docs/MULTILANG_GUIDE.md)
 
 ---
 
