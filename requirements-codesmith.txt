@@ -1,0 +1,14 @@
+# CodeSmith Dependencies
+
+# Core (included in Python 3.10+)
+# - json
+# - sys
+# - io
+# - traceback
+# - doctest
+# - argparse
+# - pathlib
+
+# Optional LLM providers (install only if needed)
+# openai>=1.0.0
+# anthropic>=0.18.0

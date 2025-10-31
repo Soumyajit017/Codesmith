@@ -1,0 +1,10 @@
+{
+  "task": "Write a Python program that reads a sentence from stdin (using sys.stdin.readline()) and prints the number of words in it. Words are separated by spaces. No command-line arguments, no doctests.",
+  "test_cases": [
+    {"input": "hello world", "expected": "2"},
+    {"input": "Python is awesome", "expected": "3"},
+    {"input": "a", "expected": "1"},
+    {"input": "one two three four five", "expected": "5"}
+  ],
+  "run_doctests": false
+}
