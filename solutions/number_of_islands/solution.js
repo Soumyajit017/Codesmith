@@ -4,56 +4,45 @@
 // Space Complexity: O(m*n)
 // Generated in 0.00s
 
-const readline = require('readline');
+import sys
+import json
 
-/**
- * Count number of islands using DFS
- * Time Complexity: O(m * n)
- * Space Complexity: O(m * n)
- * Algorithm: Depth-First Search (DFS)
- */
-function numIslands(grid) {
-    if (!grid || grid.length === 0) return 0;
+def numIslands(grid):
+    """Count number of islands using DFS.
     
-    const rows = grid.length;
-    const cols = grid[0].length;
-    const visited = new Set();
-    let islands = 0;
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    Algorithm: Depth-First Search (DFS)
+    """
+    if not grid or not grid[0]:
+        return 0
     
-    function dfs(r, c) {
-        const key = `${r},${c}`;
-        if (r < 0 || r >= rows || c < 0 || c >= cols || 
-            grid[r][c] === '0' || visited.has(key)) {
-            return;
-        }
+    rows, cols = len(grid), len(grid[0])
+    visited = set()
+    islands = 0
+    
+    def dfs(r, c):
+        if (r < 0 or r >= rows or c < 0 or c >= cols or 
+            grid[r][c] == '0' or (r, c) in visited):
+            return
         
-        visited.add(key);
-        dfs(r + 1, c);
-        dfs(r - 1, c);
-        dfs(r, c + 1);
-        dfs(r, c - 1);
-    }
+        visited.add((r, c))
+        # Explore all 4 directions
+        dfs(r + 1, c)
+        dfs(r - 1, c)
+        dfs(r, c + 1)
+        dfs(r, c - 1)
     
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (grid[r][c] === '1' && !visited.has(`${r},${c}`)) {
-                dfs(r, c);
-                islands++;
-            }
-        }
-    }
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1' and (r, c) not in visited:
+                dfs(r, c)
+                islands += 1
     
-    return islands;
-}
+    return islands
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-rl.on('line', (line) => {
-    const grid = JSON.parse(line);
-    const result = numIslands(grid);
-    console.log(result);
-    rl.close();
-});
+if __name__ == '__main__':
+    grid_str = sys.stdin.readline().strip()
+    grid = json.loads(grid_str)
+    result = numIslands(grid)
+    print(result)

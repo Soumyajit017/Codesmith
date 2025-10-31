@@ -18,7 +18,7 @@ from codesmith.multilang import MultiLanguageGenerator
 
 
 def parse_leetcode_command(args):
-    """Parse LeetCode problem and save to JSON."""
+    """Parse LeetCode problem and save to ONE unified JSON file."""
     parser = LeetCodeParser()
     
     # Read problem text
@@ -40,34 +40,62 @@ def parse_leetcode_command(args):
     print(f"   Examples: {len(parsed['examples'])}")
     print(f"   Constraints: {len(parsed['constraints'])}")
     
-    # Convert to task format for each language
-    languages = args.languages or ['python', 'cpp', 'java', 'javascript']
-    
+    # Create ONE unified task file
     output_dir = args.output_dir or 'tasks'
     os.makedirs(output_dir, exist_ok=True)
     
     title_slug = parsed['title'].lower().replace(' ', '_').replace('-', '_')
+    output_file = os.path.join(output_dir, f"{title_slug}.json")
     
-    for lang in languages:
-        task_spec = parser.convert_to_codesmith_format(parsed, lang)
-        output_file = os.path.join(output_dir, f"{title_slug}_{lang}.json")
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(task_spec, f, indent=2, ensure_ascii=False)
-        
-        print(f"   ✅ {lang.upper()}: {output_file}")
+    # Create unified multi-language task format
+    unified_task = {
+        'title': parsed['title'],
+        'difficulty': parsed['difficulty'],
+        'description': parsed['description'],
+        'test_cases': parsed['test_cases'],
+        'metadata': {
+            'time_complexity': parsed['time_complexity'],
+            'space_complexity': parsed['space_complexity'],
+            'constraints': parsed['constraints'],
+            'examples': parsed['examples']
+        },
+        'languages': {
+            'python': {
+                'task': f"Write a Python program that reads input from stdin (using sys.stdin.readline()) and solves: {parsed['description']}. No command-line arguments, no doctests.",
+                'run_doctests': False
+            },
+            'cpp': {
+                'task': f"Write a C++ program that reads input from stdin and solves: {parsed['description']}. Use efficient algorithms.",
+                'run_doctests': False
+            },
+            'java': {
+                'task': f"Write a Java program that reads input from stdin and solves: {parsed['description']}. Use Scanner for input.",
+                'run_doctests': False
+            },
+            'javascript': {
+                'task': f"Write a JavaScript program that reads input from stdin and solves: {parsed['description']}. Use readline or process.stdin.",
+                'run_doctests': False
+            }
+        }
+    }
     
-    print(f"\n📁 Task files saved to: {output_dir}/")
-    return title_slug, languages
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(unified_task, f, indent=2, ensure_ascii=False)
+    
+    print(f"\n✅ Created unified task file: {output_file}")
+    print(f"   Contains specifications for: Python, C++, Java, JavaScript")
+    
+    print(f"\n📁 Task file saved to: {output_dir}/")
+    return title_slug
 
 
 def generate_multilang_command(args):
-    """Generate code in multiple languages."""
+    """Generate code in multiple languages from unified task file."""
     # Load task file
     with open(args.task_file, 'r', encoding='utf-8') as f:
-        task_spec = json.load(f)
+        unified_task = json.load(f)
     
-    print(f"\n🚀 Generating code for: {task_spec.get('metadata', {}).get('title', 'Task')}")
+    print(f"\n🚀 Generating code for: {unified_task.get('title', 'Task')}")
     print(f"   LLM Provider: {args.llm}")
     print(f"   Languages: {', '.join(args.languages or ['all'])}")
     
@@ -83,6 +111,15 @@ def generate_multilang_command(args):
             l for l in args.languages 
             if l in generator.SUPPORTED_LANGUAGES
         ]
+    
+    # Convert unified format to old format for compatibility
+    # Create a task_spec that works with the generator
+    task_spec = {
+        'task': unified_task.get('description', ''),
+        'test_cases': unified_task.get('test_cases', []),
+        'metadata': unified_task.get('metadata', {}),
+        'languages': unified_task.get('languages', {})
+    }
     
     # Generate
     results = generator.generate_all_languages(task_spec, max_attempts=args.max_attempts)
@@ -112,17 +149,17 @@ def full_workflow_command(args):
         output_dir='tasks',
         languages=args.languages
     )
-    title_slug, languages = parse_leetcode_command(parse_args)
+    title_slug = parse_leetcode_command(parse_args)
     
     # Step 2: Generate code for each language
     print("\n💻 STEP 2: Generating Multi-Language Solutions")
     print("-"*70)
     
-    # Use Python task as base (it has the most complete info)
-    python_task_file = f"tasks/{title_slug}_python.json"
+    # Use the unified task file
+    unified_task_file = f"tasks/{title_slug}.json"
     
     gen_args = argparse.Namespace(
-        task_file=python_task_file,
+        task_file=unified_task_file,
         llm=args.llm,
         api_key=args.api_key,
         output_dir=f'solutions/{title_slug}',
@@ -136,7 +173,7 @@ def full_workflow_command(args):
     print("\n" + "="*70)
     print("🎉 WORKFLOW COMPLETE!")
     print("="*70)
-    print(f"\n📁 Task JSONs: tasks/{title_slug}_*.json")
+    print(f"\n📁 Task JSON: tasks/{title_slug}.json (unified file)")
     print(f"📁 Solutions: solutions/{title_slug}/")
     
     success_count = sum(1 for r in results.values() if r.success)

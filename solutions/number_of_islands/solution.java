@@ -4,62 +4,45 @@
 // Space Complexity: O(m*n)
 // Generated in 0.00s
 
-import java.util.*;
+import sys
+import json
 
-/**
- * Count number of islands using DFS
- * Time Complexity: O(m * n)
- * Space Complexity: O(m * n)
- * Algorithm: Depth-First Search (DFS)
- */
-public class Solution {
-    private int rows, cols;
-    private Set<String> visited;
+def numIslands(grid):
+    """Count number of islands using DFS.
     
-    private void dfs(char[][] grid, int r, int c) {
-        if (r < 0 || r >= rows || c < 0 || c >= cols || 
-            grid[r][c] == '0' || visited.contains(r + "," + c)) {
-            return;
-        }
-        
-        visited.add(r + "," + c);
-        dfs(grid, r + 1, c);
-        dfs(grid, r - 1, c);
-        dfs(grid, r, c + 1);
-        dfs(grid, r, c - 1);
-    }
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    Algorithm: Depth-First Search (DFS)
+    """
+    if not grid or not grid[0]:
+        return 0
     
-    public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0) return 0;
-        
-        rows = grid.length;
-        cols = grid[0].length;
-        visited = new HashSet<>();
-        int islands = 0;
-        
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (grid[r][c] == '1' && !visited.contains(r + "," + c)) {
-                    dfs(grid, r, c);
-                    islands++;
-                }
-            }
-        }
-        return islands;
-    }
+    rows, cols = len(grid), len(grid[0])
+    visited = set()
+    islands = 0
     
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    def dfs(r, c):
+        if (r < 0 or r >= rows or c < 0 or c >= cols or 
+            grid[r][c] == '0' or (r, c) in visited):
+            return
         
-        // Parse JSON-like input
-        // In production, use Gson or Jackson
-        
-        Solution sol = new Solution();
-        // char[][] grid = parseGrid(input);
-        // int result = sol.numIslands(grid);
-        // System.out.println(result);
-        
-        scanner.close();
-    }
-}
+        visited.add((r, c))
+        # Explore all 4 directions
+        dfs(r + 1, c)
+        dfs(r - 1, c)
+        dfs(r, c + 1)
+        dfs(r, c - 1)
+    
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1' and (r, c) not in visited:
+                dfs(r, c)
+                islands += 1
+    
+    return islands
+
+if __name__ == '__main__':
+    grid_str = sys.stdin.readline().strip()
+    grid = json.loads(grid_str)
+    result = numIslands(grid)
+    print(result)
